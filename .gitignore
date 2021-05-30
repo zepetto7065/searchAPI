@@ -21,3 +21,13 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+mvnw
+mvnw.cmd
+.mvn
+HELP.md
+searchVideoAPI.iml
+
+target
+src/main/resources/json/_video_list.json
+.idea
