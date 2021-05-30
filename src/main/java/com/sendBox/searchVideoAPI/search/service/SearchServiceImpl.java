@@ -1,5 +1,6 @@
 package com.sendBox.searchVideoAPI.search.service;
 
+import com.sendBox.searchVideoAPI.search.Exception.BadRequestException;
 import com.sendBox.searchVideoAPI.search.Exception.ItemNotFoundException;
 import com.sendBox.searchVideoAPI.search.domain.RequestDTO;
 import com.sendBox.searchVideoAPI.search.domain.ResponseDTO;
@@ -9,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -37,7 +37,7 @@ public class SearchServiceImpl implements SearchService {
     public ResponseDTO getSingleItem(String id) {
         if (null == id) {
             log.error("필수 파라미터가 존재하지 않습니다.");
-            throw new ItemNotFoundException(id);
+            throw new BadRequestException();
         }
         ResponseDTO responseDTO = new ResponseDTO();
         try {
@@ -54,14 +54,18 @@ public class SearchServiceImpl implements SearchService {
     public ResponseDTO getManyItems(RequestDTO dto) {
         if (null == dto.getVideo_id()) {
             log.error("필수 파라미터가 존재하지 않습니다.");
-//            throw new ItemNotFoundException(dto.getVideo_id());
+            throw new BadRequestException();
         }
         ResponseDTO responseDTO = new ResponseDTO();
-        List<Video> items = new ArrayList<>();
+        List<Video> items;
         try {
+            if (null != dto.getStartDate()) dto.setStartDate(dto.getStartDate().replace(".", ""));
+            if (null != dto.getEndDate()) dto.setEndDate(dto.getEndDate().replace(".", ""));
+
             items = this.searchMapper.findItemsById(dto);
             responseDTO.setItems(items);
         } catch (Exception e) {
+            e.printStackTrace();
             log.error("다중 아이템 조회 실패 : ", e.getMessage());
             throw new ItemNotFoundException(dto.getVideo_id());
         }

@@ -19,7 +19,13 @@ public interface SearchMapper {
     @Select("SELECT VIDEO_ID, TITLE, THUMBNAIL, PUBLISHED_AT FROM VIDEO WHERE VIDEO_ID = #{id}")
     Video findItemById(String id);
 
-    @Select("SELECT VIDEO_ID, TITLE, THUMBNAIL, PUBLISHED_AT FROM VIDEO")
+    @Select("SELECT VIDEO_ID, TITLE, THUMBNAIL, PUBLISHED_AT FROM VIDEO" +
+            " WHERE 1=1" +
+            " <if test=\"title != null and title != '' \" > AND TITLE = #{title} </if>" +
+            " <if test=\"startDate != null and startDate != '' \" > AND #{startDate} < TO_CHAR(PUBLISHED_AT, 'YYYYMMDD%') </if>" +
+            " <if test=\"endDate != null and endDate != '' \" > AND #{endDate} > TO_CHAR(PUBLISHED_AT, 'YYYYMMDD%')  </if>" +
+            " <if test=\"ascYn eq 'Y' \">ORDER BY PUBLISHED_AT ASC </if>" +
+            " <if test=\"ascYn eq 'N' \">ORDER BY PUBLISHED_AT DESC </if>")
     List<Video> findItemsById(RequestDTO dto);
 }
 
