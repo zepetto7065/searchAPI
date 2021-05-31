@@ -2,6 +2,7 @@ package com.sendBox.searchVideoAPI.search.service;
 
 import com.sendBox.searchVideoAPI.search.Exception.BadRequestException;
 import com.sendBox.searchVideoAPI.search.Exception.ItemNotFoundException;
+import com.sendBox.searchVideoAPI.search.dao.SearchDao;
 import com.sendBox.searchVideoAPI.search.domain.RequestDTO;
 import com.sendBox.searchVideoAPI.search.domain.ResponseDTO;
 import com.sendBox.searchVideoAPI.search.domain.Video;
@@ -18,6 +19,8 @@ public class SearchServiceImpl implements SearchService {
 
     @Autowired
     private SearchMapper searchMapper;
+    @Autowired
+    private SearchDao searchDao;
 
     @Override
     public void saveVideo(List<Video> videoList) {
@@ -41,7 +44,7 @@ public class SearchServiceImpl implements SearchService {
         }
         ResponseDTO responseDTO = new ResponseDTO();
         try {
-            Video video = this.searchMapper.findItemById(id);
+            Video video = this.searchDao.selectItemById(id);
             responseDTO.setItem(video);
         } catch (Exception e) {
             log.error("단일 아이템 조회 실패 : ", e.getMessage());
@@ -62,7 +65,7 @@ public class SearchServiceImpl implements SearchService {
             if (null != dto.getStartDate()) dto.setStartDate(dto.getStartDate().replace(".", ""));
             if (null != dto.getEndDate()) dto.setEndDate(dto.getEndDate().replace(".", ""));
 
-            items = this.searchMapper.findItemsById(dto);
+            items = this.searchDao.selectItemsById(dto);
             responseDTO.setItems(items);
         } catch (Exception e) {
             e.printStackTrace();
