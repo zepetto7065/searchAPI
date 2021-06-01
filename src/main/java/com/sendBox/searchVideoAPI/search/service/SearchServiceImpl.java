@@ -1,7 +1,7 @@
 package com.sendBox.searchVideoAPI.search.service;
 
-import com.sendBox.searchVideoAPI.search.Exception.BadRequestException;
-import com.sendBox.searchVideoAPI.search.Exception.ItemNotFoundException;
+import com.sendBox.searchVideoAPI.search.Exception.MaxListLengthException;
+import com.sendBox.searchVideoAPI.search.Exception.RequestNotFoundException;
 import com.sendBox.searchVideoAPI.search.dao.SearchDao;
 import com.sendBox.searchVideoAPI.search.domain.RequestDTO;
 import com.sendBox.searchVideoAPI.search.domain.ResponseDTO;
@@ -30,8 +30,7 @@ public class SearchServiceImpl implements SearchService {
                 this.searchMapper.insertData(video);
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error("DB 적재 중 오류 발생 ! : ", e.getMessage());
+            log.error("Error while saving DB, Please Check your Error ::: {}", e.getMessage());
         }
         log.debug("data 적재 성공");
     }
@@ -39,38 +38,34 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public ResponseDTO getSingleItem(String id) {
         if (null == id) {
-            log.error("필수 파라미터가 존재하지 않습니다.");
-            throw new BadRequestException();
+            throw new RequestNotFoundException();
         }
         ResponseDTO responseDTO = new ResponseDTO();
         try {
             Video video = this.searchDao.selectItemById(id);
             responseDTO.setItem(video);
         } catch (Exception e) {
-            log.error("단일 아이템 조회 실패 : ", e.getMessage());
-            throw new ItemNotFoundException(id);
+            log.error("Could not find item , please check your id : {} , error ::: {}", id, e.getMessage());
         }
         return responseDTO;
     }
 
     @Override
     public ResponseDTO getManyItems(RequestDTO dto) {
-        if (null == dto.getVideo_id()) {
-            log.error("필수 파라미터가 존재하지 않습니다.");
-            throw new BadRequestException();
-        }
         ResponseDTO responseDTO = new ResponseDTO();
         List<Video> items;
         try {
+            //날짜 format 변환
             if (null != dto.getStartDate()) dto.setStartDate(dto.getStartDate().replace(".", ""));
             if (null != dto.getEndDate()) dto.setEndDate(dto.getEndDate().replace(".", ""));
 
             items = this.searchDao.selectItemsById(dto);
+            if (items.size() > 20) {
+                throw new MaxListLengthException(items.size());
+            }
             responseDTO.setItems(items);
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error("다중 아이템 조회 실패 : ", e.getMessage());
-            throw new ItemNotFoundException(dto.getVideo_id());
+            log.error("Could not find item , please check error ::: {}", e.getMessage());
         }
         return responseDTO;
     }

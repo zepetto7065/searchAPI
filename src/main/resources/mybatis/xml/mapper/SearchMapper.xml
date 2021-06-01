@@ -14,10 +14,12 @@
         SELECT VIDEO_ID, TITLE, THUMBNAIL, PUBLISHED_AT FROM VIDEO
         WHERE 1=1
         <if test='title != null and title != "" '>AND TITLE LIKE '%' || #{title} || '%'</if>
-        <if test='startDate != null and startDate != "" '>AND TO_CHAR(PUBLISHED_AT, 'YYYYMMDD%') > #{startDate}</if>
-        <if test='endDate != null and endDate != "" '>AND #{endDate} > TO_CHAR(PUBLISHED_AT, 'YYYYMMDD%')</if>
-        <if test='ascYn == "Y"'>ORDER BY PUBLISHED_AT ASC</if>
-        <if test='ascYn == "N"'>ORDER BY PUBLISHED_AT DESC</if>
+        <if test='startDate != null and startDate != "" '>AND TO_CHAR(PUBLISHED_AT, 'YYYYMMDD') > #{startDate}</if>
+        <if test='endDate != null and endDate != "" '>AND #{endDate} > TO_CHAR(PUBLISHED_AT, 'YYYYMMDD')</if>
+        <if test='ascYn == "Y" and title != null '>ORDER BY title ASC</if>
+        <if test='ascYn == "N" and title != null '>ORDER BY title DESC</if>
+        <if test='ascYn == "Y" and ( startDate != null or endDate != null ) '>ORDER BY PUBLISHED_AT ASC</if>
+        <if test='ascYn == "N" and ( startDate != null or endDate != null ) '>ORDER BY PUBLISHED_AT DESC</if>
     </select>
 
 </mapper>

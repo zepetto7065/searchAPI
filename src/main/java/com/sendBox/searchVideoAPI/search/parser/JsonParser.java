@@ -32,15 +32,15 @@ public class JsonParser implements ApplicationRunner {
             });
             searchService.saveVideo(listVideo);
         } catch (IOException e) {
-            log.error("j*son parsing error  : {}", e.getMessage());
+            log.error("json parsing error  : {}", e.getMessage());
         } catch (Exception e) {
-            log.error("json data save error  : {}", e.getMessage());
+            log.error("Error while saving db  : {}", e.getMessage());
         }
 
     }
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args) {
         saveJsonData();
     }
 }

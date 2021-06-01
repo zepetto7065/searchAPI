@@ -10,16 +10,17 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class UserExceptionAdvice {
 
     @ResponseBody
-    @ExceptionHandler(ItemNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    String itemNotFoundHandler(ItemNotFoundException ex) {
-        return ex.getMessage();
-    }
-
-    @ResponseBody
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     String badRequestHandler(BadRequestException ex) {
+        return ex.getMessage();
+    }
+
+
+    @ResponseBody
+    @ExceptionHandler(MaxListLengthException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    String maxListLengthHandler(MaxListLengthException ex) {
         return ex.getMessage();
     }
 }
