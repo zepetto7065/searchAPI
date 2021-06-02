@@ -1,4 +1,4 @@
-package com.sendBox.searchVideoAPI.search.Exception;
+package com.sendBox.searchVideoAPI.search.exception;
 
 public class RequestNotFoundException extends RuntimeException {
 

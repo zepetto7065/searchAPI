@@ -1,4 +1,4 @@
-package com.sendBox.searchVideoAPI.search.Exception;
+package com.sendBox.searchVideoAPI.search.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;

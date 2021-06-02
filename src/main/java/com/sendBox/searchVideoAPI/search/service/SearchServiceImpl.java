@@ -1,15 +1,16 @@
 package com.sendBox.searchVideoAPI.search.service;
 
-import com.sendBox.searchVideoAPI.search.Exception.MaxListLengthException;
-import com.sendBox.searchVideoAPI.search.Exception.RequestNotFoundException;
 import com.sendBox.searchVideoAPI.search.dao.SearchDao;
 import com.sendBox.searchVideoAPI.search.domain.RequestDTO;
 import com.sendBox.searchVideoAPI.search.domain.ResponseDTO;
 import com.sendBox.searchVideoAPI.search.domain.Video;
+import com.sendBox.searchVideoAPI.search.exception.MaxListLengthException;
+import com.sendBox.searchVideoAPI.search.exception.RequestNotFoundException;
 import com.sendBox.searchVideoAPI.search.mapper.SearchMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,16 +24,17 @@ public class SearchServiceImpl implements SearchService {
     private SearchDao searchDao;
 
     @Override
+    @Transactional
     public void saveVideo(List<Video> videoList) {
         try {
-            log.debug("data 적재 시작");
+            log.debug("=====data 적재 시작=====");
             for (Video video : videoList) {
                 this.searchMapper.insertData(video);
             }
         } catch (Exception e) {
             log.error("Error while saving DB, Please Check your Error ::: {}", e.getMessage());
         }
-        log.debug("data 적재 성공");
+        log.debug("=====data 적재 종료=====");
     }
 
     @Override
