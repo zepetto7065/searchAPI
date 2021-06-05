@@ -3,14 +3,14 @@ package com.sendBox.searchVideoAPI.search.controller;
 import com.sendBox.searchVideoAPI.search.domain.RequestDTO;
 import com.sendBox.searchVideoAPI.search.domain.ResponseDTO;
 import com.sendBox.searchVideoAPI.search.service.SearchService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@AllArgsConstructor
 public class SearchController {
 
-    @Autowired
-    private SearchService searchService;
+    private final SearchService searchService;
 
     @GetMapping("/search/api/single/{id}")
     public ResponseDTO getSingleItem(@PathVariable String id) {

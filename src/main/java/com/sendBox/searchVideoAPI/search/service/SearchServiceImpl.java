@@ -7,8 +7,8 @@ import com.sendBox.searchVideoAPI.search.domain.Video;
 import com.sendBox.searchVideoAPI.search.exception.MaxListLengthException;
 import com.sendBox.searchVideoAPI.search.exception.RequestNotFoundException;
 import com.sendBox.searchVideoAPI.search.mapper.SearchMapper;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,12 +16,11 @@ import java.util.List;
 
 @Slf4j
 @Service
+@AllArgsConstructor
 public class SearchServiceImpl implements SearchService {
 
-    @Autowired
-    private SearchMapper searchMapper;
-    @Autowired
-    private SearchDao searchDao;
+    private final SearchMapper searchMapper;
+    private final SearchDao searchDao;
 
     @Override
     @Transactional
