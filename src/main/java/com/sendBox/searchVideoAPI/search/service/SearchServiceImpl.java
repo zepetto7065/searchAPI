@@ -16,7 +16,7 @@ import java.util.List;
 
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SearchServiceImpl implements SearchService {
 
     private final SearchMapper searchMapper;
